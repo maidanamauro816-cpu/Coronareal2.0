@@ -1,0 +1,19 @@
+{
+  "expo": {
+    "name": "Corona Real",
+    "slug": "corona-real",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "coronareal",
+    "userInterfaceStyle": "dark",
+    "plugins": [
+      "expo-router"
+    ],
+    "android": {
+      "package": "com.coronareal.app",
+      "adaptiveIcon": {
+        "backgroundColor": "#0A0A0A"
+      }
+    }
+  }
+}
