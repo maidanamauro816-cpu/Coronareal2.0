@@ -63,3 +63,20 @@ El Worker entrega precios e imágenes desde Cloudflare. La aplicación todavía 
 
 ## Seguridad y producción
 La clave `API_ADMIN_TOKEN` es una protección inicial para pruebas controladas, no autenticación multi-profesional. Antes de producción, cambiarla por verificación de Firebase ID token y autorización de rol en el Worker, y asociar las imágenes/precios al identificador del profesional. CORS no es autenticación.
+
+
+## Despliegue con GitHub Actions (estructura aislada)
+La configuración de Cloudflare está separada del código de la app:
+- `cloudflare/package.json`: dependencias y comandos locales de Wrangler.
+- `wrangler.toml`: Worker, binding R2 y binding D1.
+- `cloudflare/worker.js`: endpoints de la API.
+- `cloudflare/schema.sql`: esquema de D1.
+- `.github/workflows/deploy-cloudflare-worker.yml`: despliegue manual.
+
+Antes de ejecutar el workflow:
+1. Creá el bucket R2 `corona-real` y la base D1 `corona-real-db` en la misma cuenta de Cloudflare.
+2. Reemplazá `REEMPLAZAR_CON_EL_ID_REAL_DE_D1` por el ID real de D1 en `wrangler.toml`.
+3. En GitHub → Settings → Secrets and variables → Actions, agregá los secretos `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID` y `API_ADMIN_TOKEN`.
+4. Abrí Actions → **Deploy Corona Real Cloudflare Worker** → Run workflow.
+
+El workflow aplica el esquema D1 y publica el Worker. No crea la cuenta ni los recursos R2/D1 por vos. La UI de la app y la autorización por rol profesional siguen siendo tareas separadas; nunca pongas `API_ADMIN_TOKEN` dentro de la app.
