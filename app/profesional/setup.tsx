@@ -1,0 +1,4 @@
+import React from "react"; import {View,Image,Text,StyleSheet,useWindowDimensions} from "react-native";
+const PNG="https://raw.githubusercontent.com/maidanamauro816-cpu/Coronareal2.0/main/";
+export default function Setup(){const {width,height}=useWindowDimensions();return <View style={s.root}><Image source={{uri:PNG+"Meta_AI_03_config_perfil_20261020_180003.png"}} resizeMode="contain" style={{width,height}}/><Text style={s.note}>Pantalla de referencia original. Los campos y la carga de fotos requieren integración funcional.</Text></View>}
+const s=StyleSheet.create({root:{flex:1,backgroundColor:"#0A0A0A",alignItems:"center",justifyContent:"center"},note:{position:"absolute",bottom:8,color:"#FFD700",fontSize:10,textAlign:"center"}});
