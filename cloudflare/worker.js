@@ -119,7 +119,7 @@ async function handleGaleria(request, env, url, parts) {
     const items = (listed.objects || []).map(o => ({
       key: o.key,
       nombre: o.key.slice(prefix.length),
-      url: `/api/galeria/${encodeURIComponent(categoria)}/archivo/${encodeURIComponent(o.key.slice(prefix.length))}`,
+      url: new URL(`/api/galeria/${encodeURIComponent(categoria)}/archivo/${encodeURIComponent(o.key.slice(prefix.length))}`, url.origin).toString(),
       size: o.size,
       uploaded: o.uploaded,
       contentType: o.httpMetadata?.contentType || null,
@@ -139,7 +139,7 @@ async function handleGaleria(request, env, url, parts) {
     const key = `${prefix}${Date.now()}-${crypto.randomUUID()}-${name}`;
     await env.GALERIA.put(key, bytes, { httpMetadata: { contentType } });
     return json(request, env, {
-      item: { key, nombre: key.slice(prefix.length), url: `/api/galeria/${encodeURIComponent(categoria)}/archivo/${encodeURIComponent(key.slice(prefix.length))}` }
+      item: { key, nombre: key.slice(prefix.length), url: new URL(`/api/galeria/${encodeURIComponent(categoria)}/archivo/${encodeURIComponent(key.slice(prefix.length))}`, url.origin).toString() }
     }, 201);
   }
 
