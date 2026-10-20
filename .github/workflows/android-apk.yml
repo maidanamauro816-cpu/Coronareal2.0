@@ -17,13 +17,14 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '17'
       - name: Install dependencies
         run: npm install
+      - name: Validate Expo project
+        run: npx expo install --check
       - name: Generate Android project
         run: npx expo prebuild --platform android --no-install
       - name: Build release APK
