@@ -1,0 +1,17 @@
+name = "corona-real-api"
+main = "cloudflare/worker.js"
+compatibility_date = "2026-10-20"
+
+[[r2_buckets]]
+binding = "GALERIA"
+bucket_name = "corona-real"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "corona-real-db"
+database_id = "REEMPLAZAR_CON_EL_ID_REAL_DE_D1"
+
+[vars]
+CORS_ORIGIN = "*"
+# Configure API_ADMIN_TOKEN as a Worker secret before enabling writes:
+# npx wrangler secret put API_ADMIN_TOKEN
