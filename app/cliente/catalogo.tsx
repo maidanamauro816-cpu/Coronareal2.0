@@ -1,0 +1,4 @@
+import React from "react"; import {View,Image,Text,StyleSheet,useWindowDimensions} from "react-native";
+const PNG="https://raw.githubusercontent.com/maidanamauro816-cpu/Coronareal2.0/main/";
+export default function Catalogo(){const {width,height}=useWindowDimensions();return <View style={s.root}><Image source={{uri:PNG+"Meta_AI_05_catalogo_precios_20261020_180008.png"}} resizeMode="contain" style={{width,height}}/><Text style={s.note}>Firebase todavía no está conectado: los precios reales no se cargan hasta configurar el proyecto.</Text></View>}
+const s=StyleSheet.create({root:{flex:1,backgroundColor:"#0A0A0A",alignItems:"center",justifyContent:"center"},note:{position:"absolute",bottom:8,color:"#FFD700",fontSize:10,textAlign:"center",paddingHorizontal:8}});
