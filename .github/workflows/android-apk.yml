@@ -23,10 +23,12 @@ jobs:
           java-version: '17'
       - name: Install dependencies
         run: npm install
+      - name: Align Expo native dependencies
+        run: npx expo install --fix
       - name: Validate Expo project
         run: npx expo install --check
       - name: Generate Android project
-        run: npx expo prebuild --platform android --no-install
+        run: npx expo prebuild --clean --platform android --no-install
       - name: Build release APK
         working-directory: android
         run: |
