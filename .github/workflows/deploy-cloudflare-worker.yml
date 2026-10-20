@@ -17,8 +17,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm
-          cache-dependency-path: cloudflare/package.json
 
       - name: Install isolated Cloudflare tooling
         working-directory: cloudflare
@@ -34,7 +32,10 @@ jobs:
           test -n "$CLOUDFLARE_API_TOKEN" || (echo "Falta el secreto CLOUDFLARE_API_TOKEN" && exit 1)
           test -n "$CLOUDFLARE_ACCOUNT_ID" || (echo "Falta el secreto CLOUDFLARE_ACCOUNT_ID" && exit 1)
           test -n "$API_ADMIN_TOKEN" || (echo "Falta el secreto API_ADMIN_TOKEN" && exit 1)
-          grep -q 'REEMPLAZAR_CON_EL_ID_REAL_DE_D1' ../wrangler.toml && (echo "Reemplazá database_id en wrangler.toml por el ID real de corona-real-db" && exit 1) || true
+          if grep -q 'REEMPLAZAR_CON_EL_ID_REAL_DE_D1' ../wrangler.toml; then
+            echo "Reemplazá database_id en wrangler.toml por el ID real de corona-real-db"
+            exit 1
+          fi
 
       - name: Configure API admin secret in Cloudflare
         working-directory: cloudflare
