@@ -28,6 +28,8 @@ jobs:
           java-version: '17'
       - name: Install dependencies
         run: npm install --legacy-peer-deps
+      - name: Install Expo Router peer dependency
+        run: npx expo install expo-linking
       - name: Generate native Android project
         run: npx expo prebuild --platform android --no-install
       - name: Build release APK
