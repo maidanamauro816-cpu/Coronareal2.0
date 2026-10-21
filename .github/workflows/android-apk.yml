@@ -12,6 +12,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -29,13 +30,31 @@ jobs:
         run: npx expo install --check
       - name: Generate Android project
         run: npx expo prebuild --clean --platform android --no-install
+      - name: Install verified Android NDK
+        shell: bash
+        run: |
+          set -euo pipefail
+          SDK_ROOT="${ANDROID_SDK_ROOT:-${ANDROID_HOME}}"
+          NDK_VERSION="27.1.12297006"
+          ARCHIVE="$RUNNER_TEMP/android-ndk-r27b-linux.zip"
+          curl --fail --location --retry 3 --retry-all-errors --connect-timeout 30 --max-time 900 \
+            "https://dl.google.com/android/repository/android-ndk-r27b-linux.zip" -o "$ARCHIVE"
+          echo "6fc476b2e57d7c01ac0c95817746b927035b9749  $ARCHIVE" | sha1sum --check -
+          mkdir -p "$SDK_ROOT/ndk"
+          rm -rf "$SDK_ROOT/ndk/$NDK_VERSION"
+          unzip -q "$ARCHIVE" -d "$RUNNER_TEMP/ndk-unpack"
+          mv "$RUNNER_TEMP/ndk-unpack/android-ndk-r27b" "$SDK_ROOT/ndk/$NDK_VERSION"
+          echo "ANDROID_NDK_HOME=$SDK_ROOT/ndk/$NDK_VERSION" >> "$GITHUB_ENV"
+          echo "ANDROID_NDK_ROOT=$SDK_ROOT/ndk/$NDK_VERSION" >> "$GITHUB_ENV"
+          test -x "$SDK_ROOT/ndk/$NDK_VERSION/ndk-build"
       - name: Build release APK
         working-directory: android
         run: |
           chmod +x gradlew
-          ./gradlew assembleRelease
+          ./gradlew --no-daemon --stacktrace assembleRelease
       - uses: actions/upload-artifact@v4
         with:
-          name: corona-real-apk
+          name: Corona-Real-APK
           path: android/app/build/outputs/apk/release/*.apk
           if-no-files-found: error
+          retention-days: 14
